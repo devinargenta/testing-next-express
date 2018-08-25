@@ -27,7 +27,6 @@ app.prepare()
     
     // custom route but make next render it
     server.get('/custom-route', (req, res) => app.render(req, res, '/index'));
-    
     // send all requests that dont match above to next to handle
 		server.all('*', (req, res) => handle(req, res));
 
