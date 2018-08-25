@@ -41,7 +41,7 @@ const Home = ({ show }) => {
           box-sizing: border-box;
         }
         body {
-					color: #f0f0f0;
+          color: #f0f0f0;
           margin: 0;
           padding: 0;
           line-height: 1.2em;
@@ -61,17 +61,17 @@ const Home = ({ show }) => {
           background: #010101;
           padding: 20px;
           margin: 0;
-				}
-				h1 {
-					margin: 0;
-					padding: 12px;
-				}
+        }
+        h1 {
+          margin: 0;
+          padding: 12px;
+        }
       `}</style>
     </div>
   );
 };
 
-Home.getInitialProps = async ({ req, query: { q = 'futurama'} }) => {
+Home.getInitialProps = async ({ req, query: { q = 'futurama' } }) => {
   if (req) {
     const API_URL = `http://api.tvmaze.com/singlesearch/shows?q=${q}&embed=episodes`;
     try {
