@@ -1,8 +1,10 @@
 import React from 'react';
+import 'isomorphic-unfetch';
+
 import Season from '../components/Season';
 import Episode from '../components/Episode';
 
-import 'isomorphic-unfetch';
+import { ScrollContainer } from '../components/InView';
 
 const Home = ({ show }) => {
   if (!show) {
@@ -12,8 +14,9 @@ const Home = ({ show }) => {
 
   // group seasons { [season number]: [...episodes] }
   const seasons = episodes.reduce((prev, next) => {
-    prev[next.season] = prev[next.season] || [];
-    prev[next.season].push(next);
+    const nextSeason = next.season;
+    prev[nextSeason] = prev[nextSeason] || [];
+    prev[nextSeason].push(next);
     return prev;
   }, {});
   // keys 4 mappi
@@ -21,13 +24,15 @@ const Home = ({ show }) => {
 
   // build the seasons / episodes
   const seasonsReturn = seasonsKeys.map(season => (
-    <Season
-      season={season}
-      key={season}
-      eps={seasons[season].map(ep => (
-        <Episode {...ep} key={ep.id} />
-      ))}
-    />
+    <Season season={season} key={season}>
+      <ScrollContainer
+        render={(state, inView) =>
+          seasons[season].map(episode => (
+            <Episode {...state} inView={inView} {...episode} key={episode.id} />
+          ))
+        }
+      />
+    </Season>
   ));
 
   return (
@@ -41,10 +46,11 @@ const Home = ({ show }) => {
           box-sizing: border-box;
         }
         body {
+          background: #f0f0f0;
           color: #f0f0f0;
           margin: 0;
           padding: 0;
-          line-height: 1.2em;
+          line-height: 1.4rem;
           font-size: 16px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
             Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -58,13 +64,14 @@ const Home = ({ show }) => {
           flex-wrap: wrap;
         }
         .main {
-          background: #010101;
           padding: 20px;
           margin: 0;
         }
         h1 {
           margin: 0;
-          padding: 12px;
+          padding: 18px;
+          color: #151617;
+          line-height: 1.9rem;
         }
       `}</style>
     </div>
@@ -72,16 +79,14 @@ const Home = ({ show }) => {
 };
 
 Home.getInitialProps = async ({ req, query: { q = 'futurama' } }) => {
-  if (req) {
-    const API_URL = `http://api.tvmaze.com/singlesearch/shows?q=${q}&embed=episodes`;
-    try {
-      const data = await fetch(API_URL);
-      const json = await data.json();
-      return { show: json };
-    } catch (e) {
-      console.log(e);
-      return { show: null };
-    }
+  const API_URL = `http://api.tvmaze.com/singlesearch/shows?q=${q}&embed=episodes`;
+  try {
+    const data = await fetch(API_URL);
+    const json = await data.json();
+    return { show: json };
+  } catch (e) {
+    console.log(e);
+    return { show: null };
   }
 };
 

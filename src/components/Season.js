@@ -1,26 +1,29 @@
-const Season = ({ season, eps }) => {
+
+const Season = ({ season, children}) => {
   return (
     <div className="season-container">
       <h4> Season {season}</h4>
-      <ul>{eps}</ul>
+      {children}
       <style jsx>{`
         .season-container {
           display: flex;
           flex-direction: column;
-          margin: 6px;
-          border: 1px solid #0d0d0d;
+          margin: 9px;
+          border: 2px solid #151617;
           padding: 0px;
+          border-radius: 3px;
+          overflow: hidden;
         }
         h4 {
-          padding: 12px 12px;
+          padding: 18px;
           display: flex;
           flex-align: center;
           justify-content: center;
           flex-direction: column;
           margin: 0;
-          background: #0d0d0d;
+          background: #151617;;
         }
-        ul {
+        .season-container :global(ul)  {
           padding: 0;
           margin: 0;
           display: flex;
@@ -31,17 +34,17 @@ const Season = ({ season, eps }) => {
         }
         @media (min-width: 35rem) {
           .season-container {
-            flex-basis: calc(50% - 14px);
+            flex-basis: calc(50% - 18px);
             flex-shrink: 0;
           }
         @media (min-width: 55rem) {
           .season-container {
-            flex-basis: calc(33.33% - 14px);
+            flex-basis: calc(33.33% - 18px);
           }
         }
         @media (min-width: 75rem) {
           .season-container {
-            flex-basis: calc(25% - 14px);
+            flex-basis: calc(25% - 18px);
           }
         }
       `}</style>
